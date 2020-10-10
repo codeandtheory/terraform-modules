@@ -39,8 +39,8 @@ resource "aws_security_group" "elb_private" {
       from_port   = 443
       to_port     = 443
       protocol    = "tcp"
-      cidr_blocks = [set.value]
-      description = set.key
+      cidr_blocks = [ingress.value]
+      description = ingress.key
     }
   }
   dynamic "ingress" {
@@ -49,8 +49,8 @@ resource "aws_security_group" "elb_private" {
       from_port   = 80
       to_port     = 80
       protocol    = "tcp"
-      cidr_blocks = [set.value]
-      description = set.key
+      cidr_blocks = [ingress.value]
+      description = ingress.key
     }
   }
 
@@ -73,8 +73,8 @@ resource "aws_security_group" "ssh_access" {
       from_port   = 22
       to_port     = 22
       protocol    = "tcp"
-      cidr_blocks = [set.value]
-      description = set.key
+      cidr_blocks = [ingress.value]
+      description = ingress.key
     }
   }
 
