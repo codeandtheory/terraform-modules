@@ -33,89 +33,25 @@ resource "aws_security_group" "elb_private" {
   name        = "${var.app}-${var.env} ELB private SG"
   description = "Allow traffic on port 80 and 443 from the office"
   vpc_id      = var.vpc_id
-  ingress {
-    from_port   = 443
-    to_port     = 443
-    protocol    = "tcp"
-    cidr_blocks = [var.ny_office.cidr]
-    description = var.ny_office.description
+  dynamic "ingress" {
+    for_each = var.allowed_ips
+    content {
+      from_port   = 443
+      to_port     = 443
+      protocol    = "tcp"
+      cidr_blocks = [set.value]
+      description = set.key
+    }
   }
-  ingress {
-    from_port   = 443
-    to_port     = 443
-    protocol    = "tcp"
-    cidr_blocks = [var.ny_office2.cidr]
-    description = var.ny_office2.description
-  }
-  ingress {
-    from_port   = 443
-    to_port     = 443
-    protocol    = "tcp"
-    cidr_blocks = [var.sf_office.cidr]
-    description = var.sf_office.description
-  }
-  ingress {
-    from_port   = 443
-    to_port     = 443
-    protocol    = "tcp"
-    cidr_blocks = [var.london_office.cidr]
-    description = var.london_office.description
-  }
-  ingress {
-    from_port   = 443
-    to_port     = 443
-    protocol    = "tcp"
-    cidr_blocks = [var.manila_office.cidr]
-    description = var.manila_office.description
-  }
-  ingress {
-    from_port   = 443
-    to_port     = 443
-    protocol    = "tcp"
-    cidr_blocks = [var.manila_office2.cidr]
-    description = var.manila_office2.description
-  }
-  ingress {
-    from_port   = 80
-    to_port     = 80
-    protocol    = "tcp"
-    cidr_blocks = [var.ny_office.cidr]
-    description = var.ny_office.description
-  } 
-  ingress {
-    from_port   = 80
-    to_port     = 80
-    protocol    = "tcp"
-    cidr_blocks = [var.ny_office2.cidr]
-    description = var.ny_office2.description
-  }
-  ingress {
-    from_port   = 80
-    to_port     = 80
-    protocol    = "tcp"
-    cidr_blocks = [var.sf_office.cidr]
-    description = var.sf_office.description
-  }
-  ingress {
-    from_port   = 80
-    to_port     = 80
-    protocol    = "tcp"
-    cidr_blocks = [var.london_office.cidr]
-    description = var.london_office.description
-  }
-  ingress {
-    from_port   = 80
-    to_port     = 80
-    protocol    = "tcp"
-    cidr_blocks = [var.manila_office.cidr]
-    description = var.manila_office.description
-  }
-  ingress {
-    from_port   = 80
-    to_port     = 80
-    protocol    = "tcp"
-    cidr_blocks = [var.manila_office2.cidr]
-    description = var.manila_office2.description
+  dynamic "ingress" {
+    for_each = var.allowed_ips
+    content {
+      from_port   = 80
+      to_port     = 80
+      protocol    = "tcp"
+      cidr_blocks = [set.value]
+      description = set.key
+    }
   }
 
   egress {
