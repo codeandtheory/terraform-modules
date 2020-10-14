@@ -82,3 +82,9 @@ variable "vpc_id" {
   type        = string
   description = "AWS VPC ID"
 }
+
+variable "snapshot_identifier" {
+  type = string
+  description = "To create database from this snapshot ID"
+  default = ""
+}
