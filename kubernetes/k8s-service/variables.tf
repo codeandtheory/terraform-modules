@@ -49,6 +49,12 @@ variable "timeout" {
   default     = 900
 }
 
+variable "wait" {
+  type        = bool
+  description = "Whether to wait for release to complete"
+  default     = true
+}
+
 variable "values_files" {
   type        = list
   description = "List of values files"

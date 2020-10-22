@@ -27,6 +27,7 @@ resource "helm_release" "release" {
   chart            = var.chart
   namespace        = var.namespace
   timeout          = var.timeout
+  wait             = var.wait
   values           = var.values_files
   create_namespace = true
   dynamic "set" {
