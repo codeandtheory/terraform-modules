@@ -88,3 +88,9 @@ variable "engine_version" {
   description = "Engine version"
   default = "11.8"
 }
+
+variable "auto_minor_version_upgrade" {
+  type = bool
+  description = "Auto upgrade minor version"
+  default = false
+}

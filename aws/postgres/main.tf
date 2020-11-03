@@ -62,6 +62,7 @@ module "postgres" {
   instance_class      = var.db_instance_class
   allocated_storage   = var.db_size
   publicly_accessible = false
+  auto_minor_version_upgrade = var.auto_minor_version_upgrade
 
   name     = var.db_name
   username = var.db_username
