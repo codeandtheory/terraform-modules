@@ -58,7 +58,7 @@ module "postgres" {
   identifier = var.db_identifier
 
   engine              = "postgres"
-  engine_version      = "11.5"
+  engine_version      = var.engine_version
   instance_class      = var.db_instance_class
   allocated_storage   = var.db_size
   publicly_accessible = false

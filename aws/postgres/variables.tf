@@ -82,3 +82,9 @@ variable "vpc_id" {
   type        = string
   description = "AWS VPC ID"
 }
+
+variable "engine_version" {
+  type = string
+  description = "Engine version"
+  default = "11.8"
+}
