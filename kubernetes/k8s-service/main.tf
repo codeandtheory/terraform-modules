@@ -9,6 +9,7 @@ resource "aws_route53_record" "record" {
 }
 
 resource "null_resource" "helm_dependency_build" {
+  count = var.build_chart ? 1 : 0
   triggers = {
     always = timestamp()
   }
@@ -25,11 +26,13 @@ resource "helm_release" "release" {
   depends_on       = [null_resource.helm_dependency_build]
   name             = var.name
   chart            = var.chart
+  version          = var.chart_version
+  repository       = var.chart_repository_url
   namespace        = var.namespace
   timeout          = var.timeout
   wait             = var.wait
   values           = var.values_files
-  create_namespace = true
+  create_namespace = var.create_namespace
   dynamic "set" {
     for_each = var.values_overrides
     content {
