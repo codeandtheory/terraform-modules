@@ -72,3 +72,21 @@ variable "depend_on" {
   description = "Depend on hack"
   default     = ""
 }
+
+variable "chart_version" {
+  type = string
+  description = "Version to deploy"
+  default = ""
+}
+
+variable "create_namespace" {
+  type = bool
+  description = "Create namespace on install"
+  default = true
+}
+
+variable "build_chart" {
+  type = bool
+  description = "Whether to build the chart before deploy (`eg helm dependency build`)"
+  default = false
+}
