@@ -6,7 +6,7 @@ variable "client" {}
 variable "anybody" {
   type = map
   default = {
-    cidr = "0.0.0.0/0"
+    cidr        = "0.0.0.0/0"
     description = "Anybody, Anywhere"
   }
 }

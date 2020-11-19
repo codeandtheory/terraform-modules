@@ -1,6 +1,6 @@
 variable "settings" {
   type        = map
-  description = "Map of settings to use for Postgres"
+  description = "Map of settings to use for Mysql"
   default     = {}
 }
 variable "security_group_ids" {
@@ -28,13 +28,11 @@ variable "db_host" {
 variable "db_username" {
   type        = string
   description = "Default username for RDS database"
-  default     = "datacloud"
 }
 
 variable "db_name" {
   type        = string
   description = "DB Name for RDS database"
-  default     = "datacloud"
 }
 
 variable "db_size" {
@@ -86,11 +84,23 @@ variable "vpc_id" {
 variable "engine_version" {
   type        = string
   description = "Engine version"
-  default     = "11.8"
+  default     = "5.7"
+}
+
+variable "major_engine_version" {
+  type        = string
+  description = "Engine version"
+  default     = "5.7"
 }
 
 variable "auto_minor_version_upgrade" {
   type        = bool
   description = "Auto upgrade minor version"
   default     = false
+}
+
+variable "family" {
+  type        = string
+  description = "family"
+  default     = "mysql5.7"
 }
