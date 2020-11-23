@@ -9,14 +9,14 @@ variable "app" {
 
 variable "env" {
    description = "Environment"
-   default = "dev"
+   default = "prod"
 }
 
 variable "client" {
    description = "Client name"
-   default = "codeandtheory"
+   default = "CandT"
 }
-
+  
 variable "techlead" {
   description = "Tech Lead"
   default     = "John Doe"
@@ -24,12 +24,8 @@ variable "techlead" {
 
 variable "region" {
   description = "N. Virginia"
-  default = "us-east-1"
-}
-
-variable "k8s_domain" {
-  description = "N. Virginia"
-  default = "test.codeandtheory.net"
+  default = ""
+#  default = "us-east-1"
 }
 
 # First and second octet in the CIDR
