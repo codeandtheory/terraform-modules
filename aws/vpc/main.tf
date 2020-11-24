@@ -57,11 +57,10 @@ resource "aws_subnet" "elb_subnet" {
     Env = var.env
     Client = var.client
     Tech Lead = var.techlead
-    SubnetType = "Public"
-    "kubernetes.io/cluster/${var.k8s_domain}" = "shared"
-    "kubernetes.io/role/elb" = "1"
   }
+
 }
+
 
 resource "aws_subnet" "ec2_subnet" {
   count = length(data.aws_availability_zones.available.names)
@@ -75,9 +74,6 @@ resource "aws_subnet" "ec2_subnet" {
     Env = var.env
     Client = var.client
     Tech Lead = var.techlead
-    SubnetType = "Private"
-    "kubernetes.io/cluster/${var.k8s_domain}" = "shared"
-    "kubernetes.io/role/internal-elb" = "1"
   }
 }
 
@@ -96,6 +92,22 @@ resource "aws_subnet" "rds_subnet" {
   }
 }
 
+resource "aws_subnet" "cache_subnet" {
+  count = length(data.aws_availability_zones.available.names)
+  vpc_id = aws_vpc.vpc.id
+  cidr_block = "${var.cidr_ab}.${local.cidr_c_cache_subnets + count.index}.0/24"
+  map_public_ip_on_launch = "false"
+  availability_zone = data.aws_availability_zones.available.names[count.index]
+  tags = {
+    Name = "${var.app}-${var.env}-cache-${data.aws_availability_zones.available.names[count.index]}"
+    App = var.app
+    Env = var.env
+    Client = var.client
+    Tech Lead = var.techlead
+  }
+}
+
+
 #--------------------------------------------------------------------------
 # Create DB subnet group
 #--------------------------------------------------------------------------
@@ -111,6 +123,15 @@ resource "aws_db_subnet_group" "rds_subnet_group" {
     Client = var.client
     Tech Lead = var.techlead
   }
+}
+
+#--------------------------------------------------------------------------
+# Create Cache subnet group
+#--------------------------------------------------------------------------
+
+resource "aws_elasticache_subnet_group" "cache_subnet_group" {
+  name       = "${var.app}-${var.env}-cache-subnet-group"
+  subnet_ids = aws_subnet.cache_subnet.*.id
 }
 
 #--------------------------------------------------------------------------
@@ -199,6 +220,13 @@ resource "aws_route_table_association" "rta_web" {
     subnet_id = aws_subnet.ec2_subnet[count.index].id
     route_table_id = aws_route_table.route_private.id
 }
+
+resource "aws_route_table_association" "rta_cache" {
+  count = length(aws_subnet.cache_subnet)
+    subnet_id = aws_subnet.cache_subnet[count.index].id
+    route_table_id = aws_route_table.route_private.id
+}
+
 
 # Tie the S3 VPC endpoint to the routes
 resource "aws_vpc_endpoint_route_table_association" "rta_s3_private" {

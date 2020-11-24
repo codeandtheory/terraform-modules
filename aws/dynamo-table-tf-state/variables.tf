@@ -3,6 +3,11 @@ variable "client" {
   default     = "codeandtheory"
 }
 
+variable "techlead" { 
+  description = "Tech Lead"
+  default     = "John Doe"
+}
+
 variable "app" {
   description = "Application"
   default     = "test"
