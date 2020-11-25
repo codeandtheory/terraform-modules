@@ -14,7 +14,8 @@ resource "aws_dynamodb_table" "dynamodb-terraform-state-lock" {
   tags = {
     Name   = "${var.client}-${var.app}-${var.env} DynamoDB TF State Lock Table"
     Client = var.client
-    Env    = var.env
+    Tech Lead = var.techlead
+    Env = var.env
   }
 }
 

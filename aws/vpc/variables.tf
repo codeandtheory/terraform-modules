@@ -4,19 +4,19 @@
 
 variable "app" {
   description = "Application"
-  default     = "test"
+  default = "test"
 }
 
 variable "env" {
-  description = "Environment"
-  default     = "dev"
+   description = "Environment"
+   default = "prod"
 }
 
 variable "client" {
-  description = "Client name"
-  default     = "codeandtheory"
+   description = "Client name"
+   default = "CandT"
 }
-
+  
 variable "techlead" {
   description = "Tech Lead"
   default     = "John Doe"
@@ -24,18 +24,14 @@ variable "techlead" {
 
 variable "region" {
   description = "N. Virginia"
-  default     = "us-east-1"
-}
-
-variable "k8s_domain" {
-  description = "N. Virginia"
-  default     = "test.codeandtheory.net"
+  default = ""
+#  default = "us-east-1"
 }
 
 # First and second octet in the CIDR
 variable "cidr_ab" {
   default = {
-    dev = "10.99"
+    dev     = "10.99"
   }
 }
 
@@ -50,5 +46,5 @@ locals {
 data "aws_region" "current" {}
 
 data "aws_availability_zones" "available" {
-  state = "available"
+   state = "available"
 }
