@@ -94,5 +94,5 @@ variable "create_namespace" {
 variable "build_chart" {
   type        = bool
   description = "Whether to build the chart before deploy (`eg helm dependency build`)"
-  default = false
+  default = true
 }
