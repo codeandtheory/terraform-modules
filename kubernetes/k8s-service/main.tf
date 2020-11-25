@@ -9,7 +9,7 @@ resource "aws_route53_record" "record" {
 }
 
 resource "null_resource" "helm_dependency_build" {
-  count = var.build_chart ? 1 : 0
+  count = var.build_chart && var.enabled ? 1 : 0
   triggers = {
     always = timestamp()
   }
@@ -23,6 +23,7 @@ resource "null_resource" "helm_dependency_build" {
 }
 
 resource "helm_release" "release" {
+  count            = var.enabled ? 1 : 0
   depends_on       = [null_resource.helm_dependency_build]
   name             = var.name
   chart            = var.chart
@@ -40,4 +41,9 @@ resource "helm_release" "release" {
       value = set.value
     }
   }
+}
+
+# @TODO if release is deleted outside TF, (.status) won't exist and throws error
+locals {
+  status = var.enabled ? helm_release.release[0].status : "not deployed"
 }

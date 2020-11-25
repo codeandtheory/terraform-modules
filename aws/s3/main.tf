@@ -1,13 +1,13 @@
 
 resource "aws_s3_bucket" "bucket" {
-  bucket        = var.s3_name
+  bucket = var.s3_name
   versioning {
     enabled = true
   }
   lifecycle {
     prevent_destroy = true
   }
-  tags          = merge(var.tags, map("Name", format("%s", var.s3_name)))
+  tags = merge(var.tags, map("Name", format("%s", var.s3_name)))
 }
 
 resource "aws_s3_bucket_policy" "private" {
@@ -104,7 +104,7 @@ EOF
 resource "aws_iam_policy" "read_only_policy" {
   name        = "_S3_${var.s3_name}_Read-Only"
   description = "This policy gives read-only access to the ${var.s3_name} bucket"
-  
+
   policy = <<EOF
 {
     "Version": "2012-10-17",

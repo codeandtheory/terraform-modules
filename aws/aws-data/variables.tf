@@ -1,11 +1,13 @@
 variable "domain" {
   type        = string
   description = "Route53 domain"
+  default     = "codeandtheory.net"
 }
 
 variable "private_domain" {
   type        = string
   description = "Non-public Route53 domain"
+  default     = "codeandtheory.int"
 }
 
 variable "vpc_tags" {
@@ -25,4 +27,3 @@ variable "security_group_tags" {
   description = "Tags for looking up SG's"
   default     = {}
 }
-

@@ -8,6 +8,12 @@ variable "namespace" {
   description = "Kubernetes namespace"
 }
 
+variable "enabled" {
+  type        = bool
+  description = "Enable or disable this service"
+  default     = true
+}
+
 variable "route53_zone_id" {
   type        = string
   description = "Route53 Zone ID"
@@ -74,19 +80,19 @@ variable "depend_on" {
 }
 
 variable "chart_version" {
-  type = string
+  type        = string
   description = "Version to deploy"
-  default = ""
+  default     = "" # blank means latest
 }
 
 variable "create_namespace" {
-  type = bool
+  type        = bool
   description = "Create namespace on install"
-  default = true
+  default     = true
 }
 
 variable "build_chart" {
-  type = bool
+  type        = bool
   description = "Whether to build the chart before deploy (`eg helm dependency build`)"
-  default = true
+  default = false
 }

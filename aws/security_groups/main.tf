@@ -92,10 +92,10 @@ resource "aws_security_group" "web_access" {
   description = "Allow traffic from the ELBs"
   vpc_id      = var.vpc_id
   ingress {
-    from_port   = 80
-    to_port     = 80
-    protocol    = "tcp"
-    security_groups    = [
+    from_port = 80
+    to_port   = 80
+    protocol  = "tcp"
+    security_groups = [
       aws_security_group.elb_public.id,
       aws_security_group.elb_private.id
     ]
@@ -114,18 +114,18 @@ resource "aws_security_group" "db_access" {
   description = "Database security group"
   vpc_id      = var.vpc_id
   ingress {
-    from_port   = 3306
-    to_port     = 3306
-    protocol    = "tcp"
+    from_port = 3306
+    to_port   = 3306
+    protocol  = "tcp"
     security_groups = [
       aws_security_group.web_access.id,
       aws_security_group.ssh_access.id
     ]
   }
   ingress {
-    from_port   = 5432
-    to_port     = 5432
-    protocol    = "tcp"
+    from_port = 5432
+    to_port   = 5432
+    protocol  = "tcp"
     security_groups = [
       aws_security_group.web_access.id,
       aws_security_group.ssh_access.id
@@ -146,18 +146,18 @@ resource "aws_security_group" "cache_access" {
   description = "Cache security group"
   vpc_id      = var.vpc_id
   ingress {
-    from_port   = 11211
-    to_port     = 11211
-    protocol    = "tcp"
+    from_port = 11211
+    to_port   = 11211
+    protocol  = "tcp"
     security_groups = [
       aws_security_group.web_access.id,
       aws_security_group.ssh_access.id
     ]
   }
   ingress {
-    from_port   = 6379
-    to_port     = 6379
-    protocol    = "tcp"
+    from_port = 6379
+    to_port   = 6379
+    protocol  = "tcp"
     security_groups = [
       aws_security_group.web_access.id,
       aws_security_group.ssh_access.id
@@ -177,9 +177,9 @@ resource "aws_security_group" "github_access" {
   description = "Github hooks"
   vpc_id      = var.vpc_id
   ingress {
-    from_port   = 9418
-    to_port     = 9418
-    protocol    = "tcp"
+    from_port = 9418
+    to_port   = 9418
+    protocol  = "tcp"
     cidr_blocks = [
       "140.82.112.0/20",
       "185.199.108.0/22",
@@ -188,27 +188,27 @@ resource "aws_security_group" "github_access" {
     description = "Github webhooks"
   }
   ingress {
-    from_port   = 80
-    to_port     = 80
-    protocol    = "tcp"
+    from_port = 80
+    to_port   = 80
+    protocol  = "tcp"
     cidr_blocks = [
       "140.82.112.0/20",
       "185.199.108.0/22",
       "192.30.252.0/22"
     ]
     description = "Github webhooks"
-  }   
+  }
   ingress {
-    from_port   = 9418
-    to_port     = 9418
-    protocol    = "tcp"
+    from_port = 9418
+    to_port   = 9418
+    protocol  = "tcp"
     cidr_blocks = [
       "140.82.112.0/20",
       "185.199.108.0/22",
       "192.30.252.0/22"
     ]
     description = "Github webhooks"
-  }   
+  }
   egress {
     from_port   = 0
     to_port     = 0
@@ -223,9 +223,9 @@ resource "aws_security_group" "blazemeter_debug_access" {
   description = "Blazemeter debug access"
   vpc_id      = var.vpc_id
   ingress {
-    from_port   = 443
-    to_port     = 443
-    protocol    = "tcp"
+    from_port = 443
+    to_port   = 443
+    protocol  = "tcp"
     cidr_blocks = [
       "35.245.251.194/32",
       "35.245.160.5/32",
@@ -239,9 +239,9 @@ resource "aws_security_group" "blazemeter_debug_access" {
     description = "Blazemeter debug test engines"
   }
   ingress {
-    from_port   = 80
-    to_port     = 80
-    protocol    = "tcp"
+    from_port = 80
+    to_port   = 80
+    protocol  = "tcp"
     cidr_blocks = [
       "35.245.251.194/32",
       "35.245.160.5/32",
@@ -268,9 +268,9 @@ resource "aws_security_group" "blazemeter_api_access" {
   description = "Blazemeter API access"
   vpc_id      = var.vpc_id
   ingress {
-    from_port   = 443
-    to_port     = 443
-    protocol    = "tcp"
+    from_port = 443
+    to_port   = 443
+    protocol  = "tcp"
     cidr_blocks = [
       "35.245.252.18/32",
       "35.236.217.19/32",
@@ -305,9 +305,9 @@ resource "aws_security_group" "blazemeter_api_access" {
     description = "Blazemeter API test engines"
   }
   ingress {
-    from_port   = 80
-    to_port     = 80
-    protocol    = "tcp"
+    from_port = 80
+    to_port   = 80
+    protocol  = "tcp"
     cidr_blocks = [
       "35.245.252.18/32",
       "35.236.217.19/32",
@@ -340,7 +340,7 @@ resource "aws_security_group" "blazemeter_api_access" {
       "34.82.42.213/32"
     ]
     description = "Blazemeter API test engines"
-  } 
+  }
   egress {
     from_port   = 0
     to_port     = 0
@@ -355,9 +355,9 @@ resource "aws_security_group" "cloudflare_access" {
   description = "Allow Cloudflare incoming traffic on port 80 and 443"
   vpc_id      = var.vpc_id
   ingress {
-    from_port   = 443
-    to_port     = 443
-    protocol    = "tcp"
+    from_port = 443
+    to_port   = 443
+    protocol  = "tcp"
     cidr_blocks = [
       "173.245.48.0/20",
       "103.21.244.0/22",
@@ -373,13 +373,13 @@ resource "aws_security_group" "cloudflare_access" {
       "104.16.0.0/12",
       "172.64.0.0/13",
       "131.0.72.0/22"
-    ] 
+    ]
     description = "Cloudflare access"
-  } 
+  }
   ingress {
-    from_port   = 80
-    to_port     = 80
-    protocol    = "tcp"
+    from_port = 80
+    to_port   = 80
+    protocol  = "tcp"
     cidr_blocks = [
       "173.245.48.0/20",
       "103.21.244.0/22",
