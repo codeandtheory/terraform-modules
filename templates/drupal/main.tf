@@ -13,6 +13,11 @@ locals {
   vault_path       = "vault:secret/data/environments/${var.project}/${var.name}"
   database_host    = "mysql.${var.name}.${var.project}.${var.domain}"
   solr_host        = "solr.${local.hostname}"
+  # Drupal extra values files
+  drupal_values_files = [
+    for f in var.values_files :
+    file(f)
+  ]
 }
 
 # Lookup common AWS configuration
@@ -90,10 +95,10 @@ module "drupal" {
   name      = "drupal"
   namespace = local.namespace
   chart                = "drupal"
-  chart_version        = "1.0.0"
+  chart_version        = "1.0.1"
   chart_repository_url = var.chart_repository_url
   timeout              = var.timeout
-  values_files         = var.values_files
+  values_files         = local.drupal_values_files
   values_overrides = {
     "drupal.replicaCount"      = 2
     "drupal.iamRole"           = "${var.project}-${var.name}-drupal" # @TODO, CREATE IAM ROLE MODULE OUTPUT
@@ -138,6 +143,7 @@ module "vault" {
   vault_kube_auth_path = var.vault_kube_auth_path
   service_accounts = [
     "drupal",
+    "drupal-hook",
     "jenkins"
   ]
   namespaces = [local.namespace]
@@ -145,7 +151,7 @@ module "vault" {
 {
   "DB_DATABASE": "${var.project}",
   "DB_USERNAME": "${var.project}",
-  "DB_PASSORD": "${module.database.master_password}",
+  "DB_PASSWORD": "${module.database.master_password}",
   "DB_HOST": "${local.database_host}",
   "SOLR_HOST": "${local.solr_host}",
   "SOLR_PASSWORD": "${random_password.solr_password.result}"
