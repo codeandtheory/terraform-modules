@@ -18,6 +18,7 @@ locals {
     for f in var.values_files :
     file(f)
   ]
+  allowed_ips      = join("\\,", var.allowed_ips)
 }
 
 # Lookup common AWS configuration
@@ -110,6 +111,7 @@ module "drupal" {
     "drupal.vaultPath"         = local.vault_path
     "drupal.vaultKubeAuthPath" = module.vault.vault_kube_auth_path
     "drupal.vaultKubeRole"     = module.vault.vault_role_name
+    "drupal.allowedIPs"        = "${local.allowed_ips}"
   }
 }
 
@@ -131,6 +133,7 @@ module "solr" {
     "solr.user"     = "solr"
     "solr.password" = "${random_password.solr_password.result}"
     "ingress.host"  = "${local.solr_host}"
+    "allowedIPs"    = local.allowed_ips
   }
 }
 

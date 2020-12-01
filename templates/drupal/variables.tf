@@ -143,3 +143,9 @@ variable "image_repository" {
   type        = string
   description = "Docker image repo (e.g. ACM or internal Docker registry)"
 }
+
+variable "allowed_ips" {
+  type = list
+  description = "List of allowed IP addresses"
+  default = ["14.14.14.14/32"] 
+}
