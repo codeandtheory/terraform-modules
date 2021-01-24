@@ -5,17 +5,17 @@ resource "aws_dynamodb_table" "dynamodb-terraform-state-lock" {
   hash_key       = "LockID"
   read_capacity  = 20
   write_capacity = 20
-
   attribute {
-    name = "LockID"
-    type = "S"
+    name         = "LockID"
+    type         = "S"
   }
 
   tags = {
-    Name   = "${var.client}-${var.app}-${var.env} DynamoDB TF State Lock Table"
-    Client = var.client
-    Tech Lead = var.techlead
-    Env = var.env
+    Name        = "${var.client}-${var.app}-${var.env} DynamoDB TF State Lock Table"
+    Client      = var.client
+    "Tech Lead" = var.techlead
+    Env         = var.env
+    App         = var.app
   }
 }
 
