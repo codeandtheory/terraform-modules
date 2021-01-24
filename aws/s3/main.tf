@@ -1,4 +1,3 @@
-
 resource "aws_s3_bucket" "bucket" {
   bucket = var.s3_name
   versioning {
@@ -24,9 +23,9 @@ resource "aws_s3_bucket_policy" "private" {
       "Effect": "Allow",
       "Resource": ["arn:aws:s3:::${var.s3_name}",
                    "arn:aws:s3:::${var.s3_name}/*"],
-      "Principal": {
-        "AWS": ["arn:aws:iam::${var.aws_account_id}:user/${var.aws_username}"]
-      }
+#      "Principal": {
+#        "AWS": ["arn:aws:iam::${var.aws_account_id}:user/${var.aws_username}"]
+#      }
     }
   ]
 }
@@ -47,9 +46,9 @@ resource "aws_s3_bucket_policy" "public" {
       "Effect": "Allow",
       "Resource": ["arn:aws:s3:::${var.s3_name}",
                    "arn:aws:s3:::${var.s3_name}/*"],
-      "Principal": {
-        "AWS": ["arn:aws:iam::${var.aws_account_id}:user/${var.aws_username}"]
-      }
+#      "Principal": {
+#        "AWS": ["arn:aws:iam::${var.aws_account_id}:user/${var.aws_username}"]
+#      }
     },
     {
       "Sid": "",
