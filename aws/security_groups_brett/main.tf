@@ -3,7 +3,7 @@
 #-------------------------------------------------------------------------------
 
 resource "aws_security_group" "elb_public" {
-  name        = "${var.client}-${var.app}-${var.env} ELB public SG"
+  name        = "${var.app}-${var.env} ELB public SG"
   description = "Allow all incoming traffic on port 80 and 443"
   vpc_id      = var.vpc_id
   ingress {
@@ -30,92 +30,28 @@ resource "aws_security_group" "elb_public" {
 }
 
 resource "aws_security_group" "elb_private" {
-  name        = "${var.client}-${var.app}-${var.env} ELB private SG"
+  name        = "${var.app}-${var.env} ELB private SG"
   description = "Allow traffic on port 80 and 443 from the office"
   vpc_id      = var.vpc_id
-  ingress {
-    from_port   = 443
-    to_port     = 443
-    protocol    = "tcp"
-    cidr_blocks = [var.ny_office.cidr]
-    description = var.ny_office.description
+  dynamic "ingress" {
+    for_each = var.allowed_ips
+    content {
+      from_port   = 443
+      to_port     = 443
+      protocol    = "tcp"
+      cidr_blocks = [ingress.value]
+      description = ingress.key
+    }
   }
-  ingress {
-    from_port   = 443
-    to_port     = 443
-    protocol    = "tcp"
-    cidr_blocks = [var.ny_office2.cidr]
-    description = var.ny_office2.description
-  }
-  ingress {
-    from_port   = 443
-    to_port     = 443
-    protocol    = "tcp"
-    cidr_blocks = [var.sf_office.cidr]
-    description = var.sf_office.description
-  }
-  ingress {
-    from_port   = 443
-    to_port     = 443
-    protocol    = "tcp"
-    cidr_blocks = [var.london_office.cidr]
-    description = var.london_office.description
-  }
-  ingress {
-    from_port   = 443
-    to_port     = 443
-    protocol    = "tcp"
-    cidr_blocks = [var.manila_office.cidr]
-    description = var.manila_office.description
-  }
-  ingress {
-    from_port   = 443
-    to_port     = 443
-    protocol    = "tcp"
-    cidr_blocks = [var.manila_office2.cidr]
-    description = var.manila_office2.description
-  }
-  ingress {
-    from_port   = 80
-    to_port     = 80
-    protocol    = "tcp"
-    cidr_blocks = [var.ny_office.cidr]
-    description = var.ny_office.description
-  } 
-  ingress {
-    from_port   = 80
-    to_port     = 80
-    protocol    = "tcp"
-    cidr_blocks = [var.ny_office2.cidr]
-    description = var.ny_office2.description
-  }
-  ingress {
-    from_port   = 80
-    to_port     = 80
-    protocol    = "tcp"
-    cidr_blocks = [var.sf_office.cidr]
-    description = var.sf_office.description
-  }
-  ingress {
-    from_port   = 80
-    to_port     = 80
-    protocol    = "tcp"
-    cidr_blocks = [var.london_office.cidr]
-    description = var.london_office.description
-  }
-  ingress {
-    from_port   = 80
-    to_port     = 80
-    protocol    = "tcp"
-    cidr_blocks = [var.manila_office.cidr]
-    description = var.manila_office.description
-  }
-  ingress {
-    from_port   = 80
-    to_port     = 80
-    protocol    = "tcp"
-    cidr_blocks = [var.manila_office2.cidr]
-    description = var.manila_office2.description
+  dynamic "ingress" {
+    for_each = var.allowed_ips
+    content {
+      from_port   = 80
+      to_port     = 80
+      protocol    = "tcp"
+      cidr_blocks = [ingress.value]
+      description = ingress.key
+    }
   }
 
   egress {
@@ -128,72 +64,20 @@ resource "aws_security_group" "elb_private" {
 }
 
 resource "aws_security_group" "ssh_access" {
-  name        = "${var.client}-${var.app}-${var.env} ssh SG"
+  name        = "${var.app}-${var.env} ssh SG"
   description = "Allow ssh access"
   vpc_id      = var.vpc_id
-  ingress {
-    from_port   = 22
-    to_port     = 22
-    protocol    = "tcp"
-    cidr_blocks = [var.ny_office.cidr]
-    description = var.ny_office.description
+  dynamic "ingress" {
+    for_each = var.allowed_ips
+    content {
+      from_port   = 22
+      to_port     = 22
+      protocol    = "tcp"
+      cidr_blocks = [ingress.value]
+      description = ingress.key
+    }
   }
-  ingress {
-    from_port   = 22
-    to_port     = 22
-    protocol    = "tcp"
-    cidr_blocks = [var.ny_office2.cidr]
-    description = var.ny_office2.description
-  }
-  ingress {
-    from_port   = 22
-    to_port     = 22
-    protocol    = "tcp"
-    cidr_blocks = [var.sf_office.cidr]
-    description = var.sf_office.description
-  }
-  ingress {
-    from_port   = 22
-    to_port     = 22
-    protocol    = "tcp"
-    cidr_blocks = [var.london_office.cidr]
-    description = var.london_office.description
-  }
-  ingress {
-    from_port   = 22
-    to_port     = 22
-    protocol    = "tcp"
-    cidr_blocks = [var.manila_office.cidr]
-    description = var.manila_office.description
-  }
-  ingress {
-    from_port   = 22
-    to_port     = 22
-    protocol    = "tcp"
-    cidr_blocks = [var.manila_office2.cidr]
-    description = var.manila_office2.description
-  }
-  ingress {
-    from_port   = 22
-    to_port     = 22
-    protocol    = "tcp"
-    cidr_blocks = [var.candt_k8s_vpc_nat.cidr]
-    description = var.candt_k8s_vpc_nat.description
-  }
-  ingress {
-    from_port   = 22
-    to_port     = 22
-    protocol    = "tcp"
-    cidr_blocks = [var.candt_k8s_vpc_nat2.cidr]
-    description = var.candt_k8s_vpc_nat2.description
-  }
-  ingress {
-    from_port   = 22
-    to_port     = 22
-    protocol    = "tcp"
-    cidr_blocks = [var.candt_k8s_vpc_nat3.cidr]
-    description = var.candt_k8s_vpc_nat3.description
-  }
+
   egress {
     from_port   = 0
     to_port     = 0
@@ -204,23 +88,14 @@ resource "aws_security_group" "ssh_access" {
 }
 
 resource "aws_security_group" "web_access" {
-  name        = "${var.client}-${var.app}-${var.env} Web SG"
+  name        = "${var.app}-${var.env} Web SG"
   description = "Allow traffic from the ELBs"
   vpc_id      = var.vpc_id
   ingress {
-    from_port   = 80
-    to_port     = 80
-    protocol    = "tcp"
-    security_groups    = [
-      aws_security_group.elb_public.id,
-      aws_security_group.elb_private.id
-    ]
-  }
-  ingress {
-    from_port   = 443
-    to_port     = 443
-    protocol    = "tcp"
-    security_groups    = [
+    from_port = 80
+    to_port   = 80
+    protocol  = "tcp"
+    security_groups = [
       aws_security_group.elb_public.id,
       aws_security_group.elb_private.id
     ]
@@ -235,22 +110,22 @@ resource "aws_security_group" "web_access" {
 }
 
 resource "aws_security_group" "db_access" {
-  name        = "${var.client}-${var.app}-${var.env} Database SG"
+  name        = "${var.app}-${var.env} Database SG"
   description = "Database security group"
   vpc_id      = var.vpc_id
   ingress {
-    from_port   = 3306
-    to_port     = 3306
-    protocol    = "tcp"
+    from_port = 3306
+    to_port   = 3306
+    protocol  = "tcp"
     security_groups = [
       aws_security_group.web_access.id,
       aws_security_group.ssh_access.id
     ]
   }
   ingress {
-    from_port   = 5432
-    to_port     = 5432
-    protocol    = "tcp"
+    from_port = 5432
+    to_port   = 5432
+    protocol  = "tcp"
     security_groups = [
       aws_security_group.web_access.id,
       aws_security_group.ssh_access.id
@@ -267,22 +142,22 @@ resource "aws_security_group" "db_access" {
 
 # Making one SG for caching, regardless if it's Redis or Memcached
 resource "aws_security_group" "cache_access" {
-  name        = "${var.client}-${var.app}-${var.env} Cache SG"
+  name        = "${var.app}-${var.env} Cache SG"
   description = "Cache security group"
   vpc_id      = var.vpc_id
   ingress {
-    from_port   = 11211
-    to_port     = 11211
-    protocol    = "tcp"
+    from_port = 11211
+    to_port   = 11211
+    protocol  = "tcp"
     security_groups = [
       aws_security_group.web_access.id,
       aws_security_group.ssh_access.id
     ]
   }
   ingress {
-    from_port   = 6379
-    to_port     = 6379
-    protocol    = "tcp"
+    from_port = 6379
+    to_port   = 6379
+    protocol  = "tcp"
     security_groups = [
       aws_security_group.web_access.id,
       aws_security_group.ssh_access.id
@@ -298,13 +173,13 @@ resource "aws_security_group" "cache_access" {
 }
 
 resource "aws_security_group" "github_access" {
-  name        = "${var.client}-${var.app}-${var.env} Github hooks"
+  name        = "${var.app}-${var.env} Github hooks"
   description = "Github hooks"
   vpc_id      = var.vpc_id
   ingress {
-    from_port   = 9418
-    to_port     = 9418
-    protocol    = "tcp"
+    from_port = 9418
+    to_port   = 9418
+    protocol  = "tcp"
     cidr_blocks = [
       "140.82.112.0/20",
       "185.199.108.0/22",
@@ -313,27 +188,27 @@ resource "aws_security_group" "github_access" {
     description = "Github webhooks"
   }
   ingress {
-    from_port   = 80
-    to_port     = 80
-    protocol    = "tcp"
+    from_port = 80
+    to_port   = 80
+    protocol  = "tcp"
     cidr_blocks = [
       "140.82.112.0/20",
       "185.199.108.0/22",
       "192.30.252.0/22"
     ]
     description = "Github webhooks"
-  }   
+  }
   ingress {
-    from_port   = 9418
-    to_port     = 9418
-    protocol    = "tcp"
+    from_port = 9418
+    to_port   = 9418
+    protocol  = "tcp"
     cidr_blocks = [
       "140.82.112.0/20",
       "185.199.108.0/22",
       "192.30.252.0/22"
     ]
     description = "Github webhooks"
-  }   
+  }
   egress {
     from_port   = 0
     to_port     = 0
@@ -344,13 +219,13 @@ resource "aws_security_group" "github_access" {
 }
 
 resource "aws_security_group" "blazemeter_debug_access" {
-  name        = "${var.client}-${var.app}-${var.env} Blazemeter debug access"
+  name        = "${var.app}-${var.env} Blazemeter debug access"
   description = "Blazemeter debug access"
   vpc_id      = var.vpc_id
   ingress {
-    from_port   = 443
-    to_port     = 443
-    protocol    = "tcp"
+    from_port = 443
+    to_port   = 443
+    protocol  = "tcp"
     cidr_blocks = [
       "35.245.251.194/32",
       "35.245.160.5/32",
@@ -364,9 +239,9 @@ resource "aws_security_group" "blazemeter_debug_access" {
     description = "Blazemeter debug test engines"
   }
   ingress {
-    from_port   = 80
-    to_port     = 80
-    protocol    = "tcp"
+    from_port = 80
+    to_port   = 80
+    protocol  = "tcp"
     cidr_blocks = [
       "35.245.251.194/32",
       "35.245.160.5/32",
@@ -389,13 +264,13 @@ resource "aws_security_group" "blazemeter_debug_access" {
 }
 
 resource "aws_security_group" "blazemeter_api_access" {
-  name        = "${var.client}-${var.app}-${var.env} Blazemeter API access"
+  name        = "${var.app}-${var.env} Blazemeter API access"
   description = "Blazemeter API access"
   vpc_id      = var.vpc_id
   ingress {
-    from_port   = 443
-    to_port     = 443
-    protocol    = "tcp"
+    from_port = 443
+    to_port   = 443
+    protocol  = "tcp"
     cidr_blocks = [
       "35.245.252.18/32",
       "35.236.217.19/32",
@@ -430,9 +305,9 @@ resource "aws_security_group" "blazemeter_api_access" {
     description = "Blazemeter API test engines"
   }
   ingress {
-    from_port   = 80
-    to_port     = 80
-    protocol    = "tcp"
+    from_port = 80
+    to_port   = 80
+    protocol  = "tcp"
     cidr_blocks = [
       "35.245.252.18/32",
       "35.236.217.19/32",
@@ -465,7 +340,7 @@ resource "aws_security_group" "blazemeter_api_access" {
       "34.82.42.213/32"
     ]
     description = "Blazemeter API test engines"
-  } 
+  }
   egress {
     from_port   = 0
     to_port     = 0
@@ -476,13 +351,13 @@ resource "aws_security_group" "blazemeter_api_access" {
 }
 
 resource "aws_security_group" "cloudflare_access" {
-  name        = "${var.client}-${var.app}-${var.env} Cloudflare access"
+  name        = "${var.app}-${var.env} Cloudflare access"
   description = "Allow Cloudflare incoming traffic on port 80 and 443"
   vpc_id      = var.vpc_id
   ingress {
-    from_port   = 443
-    to_port     = 443
-    protocol    = "tcp"
+    from_port = 443
+    to_port   = 443
+    protocol  = "tcp"
     cidr_blocks = [
       "173.245.48.0/20",
       "103.21.244.0/22",
@@ -498,13 +373,13 @@ resource "aws_security_group" "cloudflare_access" {
       "104.16.0.0/12",
       "172.64.0.0/13",
       "131.0.72.0/22"
-    ] 
+    ]
     description = "Cloudflare access"
-  } 
+  }
   ingress {
-    from_port   = 80
-    to_port     = 80
-    protocol    = "tcp"
+    from_port = 80
+    to_port   = 80
+    protocol  = "tcp"
     cidr_blocks = [
       "173.245.48.0/20",
       "103.21.244.0/22",

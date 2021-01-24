@@ -29,7 +29,3 @@ output "github_access_id" {
 output "cloudflare_access_id" {
   value = aws_security_group.cloudflare_access.id
 }
-
-output "ny_office_cidr" {
-  value = var.ny_office.cidr
-}

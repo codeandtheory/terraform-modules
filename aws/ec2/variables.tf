@@ -27,14 +27,14 @@ variable "instance_type" {
   default = "t2.micro"
 }
 
+variable "key_pair" {
+  description = "ssh key to be used initially"
+  default = "ringcentral"
+}
+
 variable "server_type" {
   description = "The type of server being spun up"
   default = "www"
-}
-
-variable "key_pair" {
-  description = "ssh key to be used initially"
-  default = "kjartan"
 }
 
 variable "subnet_ids" {
