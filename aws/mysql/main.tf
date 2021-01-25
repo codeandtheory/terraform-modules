@@ -8,12 +8,6 @@ resource "random_password" "db_master_password" {
   special = false
 }
 
-resource "random_password" "db_password" {
-  length  = 24
-  special = false
-}
-
-
 resource "aws_security_group" "mysql" {
   name        = local.name
   description = "Allow Mysql Traffic"
