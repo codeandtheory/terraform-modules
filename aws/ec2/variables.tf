@@ -29,7 +29,7 @@ variable "instance_type" {
 
 variable "key_pair" {
   description = "ssh key to be used initially"
-  default = "ringcentral"
+  default = "devops"
 }
 
 variable "server_type" {
