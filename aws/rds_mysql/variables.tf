@@ -18,7 +18,7 @@ variable "db_username" {
 variable "db_name" {
   type        = string
   description = "DB Name for RDS database"
-  default = "database"
+  default = "iamadatabase"
 }
 
 variable "db_size" {
