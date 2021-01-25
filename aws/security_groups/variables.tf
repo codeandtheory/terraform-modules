@@ -2,6 +2,7 @@ variable "vpc_id" {}
 variable "app" {}
 variable "env" {}
 variable "client" {}
+variable "techlead" {}
 
 variable "anybody" {
   type = map
