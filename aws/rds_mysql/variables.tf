@@ -15,10 +15,10 @@ variable "db_username" {
   description = "Default username for RDS database"
 }
 
-variable "rds_name" {
+variable "db_name" {
   type        = string
   description = "DB Name for RDS database"
-  default = "db"
+  default = "database"
 }
 
 variable "db_size" {
