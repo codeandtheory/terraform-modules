@@ -19,10 +19,10 @@ resource "aws_elasticache_replication_group" "default" {
   port                          = var.port
   subnet_group_name             = "${var.app}-${var.env}-cache-subnet-group"
   tags = {
-    Name    = "${var.app}-${var.env}-redis"
-    Env     = var.env
-    App     = var.app
-    Client  = var.client
-    Tech Lead = var.techlead
+    Name        = "${var.app}-${var.env}-redis"
+    Env         = var.env
+    App         = var.app
+    Client      = var.client
+    "Tech Lead" = var.techlead
   }
 }
