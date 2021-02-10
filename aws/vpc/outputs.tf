@@ -15,9 +15,9 @@ output "rds_subnet_ids" {
 }
 
 output "rds_subnet_group" {
-  value = aws_db_subnet_group.rds_subnet_group[0].id
+  value = "${ var.make_rds_subnets ? aws_db_subnet_group.rds_subnet_group[0].id : "" }"
 }
 
 output "rds_subnet_group_name" {
-  value = aws_db_subnet_group.rds_subnet_group[0].name
+  value = "${ var.make_rds_subnets ? aws_db_subnet_group.rds_subnet_group[0].name : "" }"
 }

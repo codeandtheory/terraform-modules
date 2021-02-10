@@ -17,7 +17,11 @@ resource "aws_key_pair" "imported" {
   count      = var.generate_ssh_key == false ? 1 : 0
   key_name   = "${var.client}-${var.app}"
   public_key = file(local.public_key_filename)
-  tags       = var.tags
+  tags       = {
+    App          = var.app
+    Client       = var.client
+    "Tech Lead"  = var.techlead
+  }
 }
 
 resource "tls_private_key" "default" {
@@ -30,7 +34,11 @@ resource "aws_key_pair" "generated" {
   depends_on = [tls_private_key.default]
   key_name   = "${var.client}-${var.app}"
   public_key = tls_private_key.default[0].public_key_openssh
-  tags       = var.tags
+  tags       = {
+    App          = var.app
+    Client       = var.client
+    "Tech Lead"  = var.techlead
+  }
 }
 
 resource "local_file" "public_key_openssh" {

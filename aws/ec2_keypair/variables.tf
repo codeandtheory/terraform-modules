@@ -8,27 +8,26 @@ variable "app" {
   description = "App"
 }
 
-variable "tags" {
-  type = map
-  default = {
-    "Tech Lead"  = "John Doe"
-  }
+variable "techlead" {
+  type        = string
+  description = "Tech Lead"
 }
 
 variable "ssh_public_key_path" {
   type        = string
   description = "Path to SSH public key directory (e.g. `/secrets`)"
+  default     = "./"
 }
 
 variable "ssh_public_key_file" {
   type        = string
-  description = "Name of existing SSH public key file (e.g. `id_rsa.pub`)"
+  description = "Name of existing SSH public key file (e.g. `id_rsa.pub`) to be imported into AWS"
   default     = null
 }
 
 variable "generate_ssh_key" {
   type        = bool
-  default     = false
+  default     = true
   description = "If set to `true`, new SSH key pair will be created and `ssh_public_key_file` will be ignored"
 }
 
@@ -40,7 +39,7 @@ variable "ssh_key_algorithm" {
 
 variable "private_key_extension" {
   type        = string
-  default     = ""
+  default     = ".pem"
   description = "Private key extension"
 }
 
