@@ -21,27 +21,17 @@ variable "techlead" {
 # Preexsisting
 variable "domain" {
   description = "Domain"
-  default     = codeandtheory.net
+  default     = "codeandtheory.io"
 }
 
-# Will always be created
 variable "subdomain" {
-  description = "Subdomain (client or project)"
-  default     = client
+  description = "Subdomain"
+  default     = "client"
 }
 
-# optional
-# list of domains
-variable "subsubdomain" {
-  description = "Subsubdomain (project or environment)"
-  default     = project
-}
-
-# optional
-# list of domains
-# list of domains
-variable "subsubsubdomain" {
-  description = "Subsubsubdomain (environment or type of service)"
-  default     = environment
-}
+# Will be created in the ALB module
+#variable "subsubdomain" {
+#  description = "Subsubdomain"
+#  default     = project
+#}
 

@@ -1,53 +1,45 @@
 # Example vars:
-# var.domain:    codeandtheory.net
-# var.subdomain: sands
-# var.env:       dev
-# Which would result in dev.sands.codeandtheory.net being created
+# var.domain:       codeandtheory.net
+# var.subdomain:    test
+# Which would result in test.codeandtheory.net being created and SSL certs for that subdomain
 
-# sands.codeandtheory.net
-data "aws_route53_zone" "subdomain" {
-  name         = "${var.subdomain}.${var.domain}."
+# Get some info about the domain
+data "aws_route53_zone" "domain" {
+  name         = "${var.domain}."
   private_zone = false
 }
 
-resource "aws_route53_zone" "env_subdomain" {
-  name = "${var.env}.${var.subdomain}.${var.domain}"
+# Create a zone for the subdomain. This makes it easier to view records and know who's responsible.
+resource "aws_route53_zone" "subdomain" {
+  name = "${var.subdomain}.${var.domain}"
   tags = {
-    Env         = var.env
     App         = var.app
     Client      = var.client
     "Tech Lead" = var.techlead
   }
 }
 
-resource "aws_route53_record" "env_subdomain_ns" {
-  zone_id = data.aws_route53_zone.subdomain.zone_id
-  name    = "${var.env}.${var.subdomain}.${var.domain}"
+# Create a forwarding record in the domain
+resource "aws_route53_record" "subdomain_ns" {
+  zone_id = data.aws_route53_zone.domain.zone_id
+  name    = "${var.subdomain}.${var.domain}"
   type    = "NS"
   ttl     = "30"
-  records = aws_route53_zone.env_subdomain.name_servers
+  records = aws_route53_zone.subdomain.name_servers
 }
-
-resource "aws_route53_record" "list of records" {
-  zone_id = aws_route53_zone.env_subdomain.zone_id
-  name    = "${list of records}.${var.env}.${var.subdomain}.${var.domain}"
-  type    = "CNAME"
-  ttl     = "300"
-# ALB goes below
-  records = [aws_lb.main.dns_name]
-}
-
 
 # Create SSL cert
 resource "aws_acm_certificate" "cert" {
-  domain_name               = "${var.env}.${var.subdomain}.${var.domain}"
-  subject_alternative_names = ["*.${var.env}.${var.subdomain}.${var.domain}"]
+  domain_name               = "${var.subdomain}.${var.domain}"
+  subject_alternative_names = ["*.${var.subdomain}.${var.domain}"]
   validation_method         = "DNS"
-
-  tags = var.common_tags
-
   lifecycle {
     create_before_destroy = true
+  }
+  tags = {
+    App         = var.app
+    Client      = var.client
+    "Tech Lead" = var.techlead
   }
 }
 
@@ -58,10 +50,9 @@ resource "aws_route53_record" "validation" {
       name    = dvo.resource_record_name
       record  = dvo.resource_record_value
       type    = dvo.resource_record_type
-      zone_id = aws_route53_zone.env_subdomain.zone_id
+      zone_id = aws_route53_zone.subdomain.zone_id
     }
   }
-
   allow_overwrite = true
   name            = each.value.name
   records         = [each.value.record]
@@ -76,3 +67,15 @@ resource "aws_acm_certificate_validation" "validation" {
   validation_record_fqdns = [for record in aws_route53_record.validation : record.fqdn]
 }
 
+
+# Add the following to the ALB module
+## Create record and assign them to an ALB
+## example: dev.sands.codeandtheory.net
+#resource "aws_route53_record" "subsubdomain" {
+#    zone_id = aws_route53_zone.subdomain.zone_id
+#    name    = "${var.subsubdomain}.${var.subdomain}.${var.domain}"
+#    type    = "CNAME"
+#    ttl     = "300"
+## ALB goes below
+#    records = alb_name
+#}
