@@ -58,13 +58,6 @@ resource "aws_security_group" "elb_private" {
     from_port   = 443
     to_port     = 443
     protocol    = "tcp"
-    cidr_blocks = [var.london_office.cidr]
-    description = var.london_office.description
-  }
-  ingress {
-    from_port   = 443
-    to_port     = 443
-    protocol    = "tcp"
     cidr_blocks = [var.manila_office.cidr]
     description = var.manila_office.description
   }
@@ -95,13 +88,6 @@ resource "aws_security_group" "elb_private" {
     protocol    = "tcp"
     cidr_blocks = [var.sf_office.cidr]
     description = var.sf_office.description
-  }
-  ingress {
-    from_port   = 80
-    to_port     = 80
-    protocol    = "tcp"
-    cidr_blocks = [var.london_office.cidr]
-    description = var.london_office.description
   }
   ingress {
     from_port   = 80
@@ -151,13 +137,6 @@ resource "aws_security_group" "ssh_access" {
     protocol    = "tcp"
     cidr_blocks = [var.sf_office.cidr]
     description = var.sf_office.description
-  }
-  ingress {
-    from_port   = 22
-    to_port     = 22
-    protocol    = "tcp"
-    cidr_blocks = [var.london_office.cidr]
-    description = var.london_office.description
   }
   ingress {
     from_port   = 22

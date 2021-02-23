@@ -31,16 +31,8 @@ variable "ny_office2" {
 variable "sf_office" {
   type = map
   default = {
-    cidr = "50.211.199.177/32"
+    cidr = "50.236.128.202/32"
     description = "SF Office"
-  }
-}
-
-variable "london_office" {
-  type = map
-  default = {
-    cidr = "81.134.142.178/32"
-    description = "London Office"
   }
 }
 
