@@ -49,7 +49,7 @@ module "filesystem" {
 
 # Mysql Database
 module "database" {
-  source               = "git::https://github.com/codeandtheory/terraform-modules.git//aws/mysql?ref=v1.0.1"
+  source               = "git::https://github.com/codeandtheory/terraform-modules.git//aws/mysql"
   db_host              = local.database_host
   db_name              = var.project
   db_username          = var.project
