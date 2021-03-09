@@ -1,5 +1,5 @@
 output "password" {
-  value = random_password.db_password.result
+  value = random_password.db_master_password.result
 }
 
 output "master_password" {
