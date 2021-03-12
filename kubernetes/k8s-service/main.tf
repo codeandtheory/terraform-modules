@@ -45,6 +45,5 @@ resource "helm_release" "release" {
 
 # @TODO if release is deleted outside TF, (.status) won't exist and throws error
 locals {
-#  status = var.enabled ? helm_release.release.0.status : "not deployed"
-  status = "deployed"
+  status = var.enabled ? helm_release.release.0.status : "not deployed"
 }
